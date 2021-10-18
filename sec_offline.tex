@@ -1,0 +1,65 @@
+
+\textbf{\emph{David L.}}
+
+Offline software encompasses many aspects of the experiment. This includes a number of systems, each of which requires either new development or implementation of existing systems using dedicated experts(s). These include:
+
+\begin{itemize}
+    \item Calibration system and database
+    \item Reconstruction framework
+    \item Reconstruction algorithms
+    \item Simulation
+    \item Offline Monitoring system
+    \item Reconstruction workflow (HPC/HTC job management)
+\end{itemize}
+
+In the following sections we describe some of these that will constitute larger efforts in terms of person-hours. It should be noted that at this time certain technology choices seem likely (e.g. GEANT4~\cite{ALLISON2016186}). However, others such as the choice of database systems, file formats, and software frameworks are purposefully left unspecified at this point in time.
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Reconstruction}
+
+\textbf{\emph{Joe O.}}
+
+In the past several decades, many reconstruction frameworks have been developed by different experiments within both HEP and NP. Several features stand out as common to all of these, which the ECCE software framework must utilize. The most important of these are modularity and user friendliness, as any large HEP/NP collaboration will necessarily comprise many hundreds of scientists with varying levels of software expertise. Therefore, these, and other generic features of excellent software, will be essential. It will additionally be imperative to recognize that software technologies change rapidly, and the ability for the software ecosystem to pivot with ease will be essential. As an example, while \texttt{git} is the de facto modern standard for code versioning and storage, it is impossible to say what versioning technologies will exist ten or more years from now when the EIC will be taking data. ECCE has not committed itself to a particular software ecosystem yet; however, these discussions will need to begin in early 2022 as these decisions will need to be made in preparation for development of a TDR.
+
+One of the trademarks of excellent reconstruction software is reproducibility. ECCE will archive several daily builds that will provide users with the latest snapshot of the software; additionally, weekly builds that persist for longer periods of time will allow tracking of code evolution. In conjunction, special tagged production builds will be archived for large centrally produced data samples, such as those that were produced in preparation for the ECCE proposal. Currently the tagged releases are performed based only on time (e.g. weekly builds). Future software versions will consider implementing modern versioning practices such as semantic versioning~\cite{semantic}. In addition to archived builds, continuous integration is another tool ensuring reproducibility. ECCE does not currently deploy robust continuous integration; however, automated tools enabled by services such as Jenkins or GitLab Runners will be deployed utilizing code checking tools and benchmark analyses. 
+
+Making software user friendly requires that it is distributed in a convenient way. Currently the ECCE framework is distributed with \texttt{cvmfs}, a package managing software developed at CERN~\cite{cernvm}, while the software environment is containerized and deployed with Singularity~\cite{singularity}. Any software system that ECCE decides on will necessitate these tools for distribution, to ensure that all users can easily access the software and that a reproducible environment is available when deploying offline analysis and simulation in a federated computing architecture.
+
+The role of hybrid architectures should also be considered in the ECCE reconstruction framework. Specifically, the use of GPU architectures will be important both for integrating machine learning into reconstruction workflows as well as generically taking advantage of the significant computational speed improvements that GPUs can provide. This integration has the added benefit of potentially utilizing the various leadership computing facilities that are available at national laboratories around the country, for more see Section~\ref{sec:offsite}.
+
+
+Based on the experience of other experiments, reconstruction software should also take advantage of common software projects that are deployed across the world. For example, the A Common Tracking Software (ACTS) package, initially designed for use at the HL-LHC, has been implemented into the sPHENIX track reconstruction framework~\cite{Osborn:2021zlr}. Several collider-physics-based open source projects exist within the broader HEP community and have recently grown in in their user base, examples include ACTS~\cite{Ai:2021ghi}, Rucio~\cite{Barisits:2019fyl}, PanDA, Fun4All~\cite{fun4allGithub}, Gaudi~\cite{Gaudi}, and others. These should be evaluated for use within the ECCE software stack in early 2022 as a part of the decision making process for the future of the offline software framework.
+
+%\emph{This section should focus on the features that are needed for the reconstruction framework. This should avoid committing to a particular software package at the moment. That is a discussion/decision we should have in early 2022 and I think this section can state that explicitly. Features that will be needed should be driven by HTC system requirements. Specifically, the ability to parallelize both vertically and horizontally. Use of heterogeneous hardware. Containerization and distribution(e.g. CVMFS) should also be discussed. Another general issue is how to distribute calibration and meta-data to potentially 100k jobs without them all hitting a single central server at once. Provisioning for multiple, replicated servers would be appropriate here.}
+
+%\emph{This will need standard statements about modularity and user friendliness of the framework. I think it would be safe to state that we expect the primary language to be C++ while not excluding the integration of other languages.}
+
+\emph{Need estimates of total CPU}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Calibration}
+
+\textbf{\emph{Jin H.}}
+
+\emph{The calibration system will be integrated into the Online/DAQ with the goal being to to produce calibrations in ``real time'' a'la LHCb. This should give some details included expected latency/disk space, etc.}
+
+\emph{Another important aspect will be how the calibration DB identifies chunks of time. We discussed making boundaries at lumi blocks corresponding to electron beam fills that are expected to happen at about 1Hz.}
+
+\emph{Need estimate of size of calibration DB/year of operation. This will be small compared to raw data, but since it will be maintained by different machines and software, it is worth breaking out.}
+
+%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+\subsection{Simulation}
+
+\textbf{\emph{Cameron D.}}
+
+\emph{Assume simulation will be done with GEANT4. Work is starting that will implement task-level parallelism to GEANT4 with support for GPUs (Makoto Asai). Should we build in multiple major development cycles to allow us to incorporate these new features as they become available?}
+
+\emph{Open questions include:}
+\begin{itemize}
+    \item \emph{Geometry definition and versioning}
+    \item \emph{Integration of Simulation and Reconstruction software}
+\end{itemize}
+
+\emph{Discuss global campaigns and support for local simulations by collaboration members.}
+
+\emph{Need estimates on amount of CPU/GPU needed for simulation per year. }
