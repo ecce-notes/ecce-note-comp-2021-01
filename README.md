@@ -1,8 +1,11 @@
-# ecce-note-comp-2021-01
+# ecce-note-template
 
-The github URL for this document is https://github.com/ecce-notes/ecce-note-comp-2021-01
+ecce-note-comp-2021-01 / Primary computing note from Cristiano & David
 
-Overleaf is https://www.overleaf.com/project/60c8ec8726f8b14fa6a861ee
+ecce-note-phys-2021-01 / Jet note from Tristan Protzman
 
-Always make sure you pull from GitHub when working with the overleaf!
+ecce-note-phys-2021-02 / Primary diffraction & tagging note from Bill Lee & Axel Schmidt
 
+ecce-note-phys-2021-03 / Primary exclusive proces note for Rachel & Julie
+
+ecce-note-det-2021-01  / Magnet note from John Lajoie

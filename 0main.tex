@@ -1,0 +1,102 @@
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                              %
+%   ECCE Note template
+%   v0 produced August 1, 2021
+%             
+%                                                              %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%  ECCE proposal team: Peter Steinberg (peter.steinberg@bnl.gov)
+
+% C. Fanelli --- Oct 8, re-adapted template
+ 
+                           
+\documentclass[12pt,twoside]{article}
+
+%%%%%%%%%%%%%%%%
+% Adding the include only list allows you to typeset only your
+% chapter while maintaining overall page numbers and references.
+% It also shields you from errors in other chapters as you go along.
+% You need to typeset the whole thing once though. 
+
+%\includeonly{title_page,daq_trig/daq_trig}
+
+%%%%%%%%%%%%%%%%%%  header  (packages, 
+\input{header}
+
+\begin{document}
+\linenumbers
+%\frontmatter
+\pagestyle{empty}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% title page
+\include{title_page}
+
+%\cleardoublepage
+%\pagestyle{fancy}
+
+\setcounter{page}{1}
+
+%\clearpage
+%\cleardoublepage
+
+%\resetlinenumber
+
+\tableofcontents
+%\cleardoublepage
+
+%\mainmatter
+
+\renewcommand{\thepage}{\arabic{page}}
+%\setcounter{chapter}{0}
+%\setcounter{page}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2 Detector Overview
+\section {Introduction}
+\label{sec:introduction}
+\input{sec_introduction}
+
+\section {Artificial Intelligence/Machine Learning}
+\label{sec:ai}
+\input{sec_AI}
+
+\section {Detector and Program Development [...]}
+\label{sec:detector_development}
+\input{sec_detector_development}
+
+\section {Online}
+\label{sec:online}
+\input{sec_online}
+
+
+\section {Offline}
+\label{sec:offline}
+\input{sec_offline}
+
+\section {Offsite Processing}
+\label{sec:offsite}
+\input{sec_offsite}
+
+\section {Resource Requirements Summary}
+\label{sec:resources}
+\input{sec_resources}
+
+
+
+%------------ TEMPLATE -----------%
+%\clearpage
+
+%\section {(Template) Detector Overview}
+%\label{det_overview}
+%\include{template_det_overview}
+
+%\section {(Template) Section 2}
+%\label{section2}
+%\include{template_section2}
+
+\listoftodos[To Do]
+
+\bibliographystyle{unsrturl}
+\bibliography{refs}
+
+\end{document}  %%%%%%%%%%%%%%%%% End Document
