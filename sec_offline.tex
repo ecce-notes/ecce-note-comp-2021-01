@@ -47,19 +47,122 @@ Based on the experience of other experiments, reconstruction software should als
 
 \emph{Need estimate of size of calibration DB/year of operation. This will be small compared to raw data, but since it will be maintained by different machines and software, it is worth breaking out.}
 
+%---------- Pasting Jin's section from the old overleaf (C. Fanelli)
+
+
+% \textbf{\emph{Jin H.}}
+
+% \emph{The calibration system will be integrated into the Online/DAQ with the goal being to to produce calibrations in ``real time'' a'la LHCb. This should give some details included expected latency/disk space, etc.}
+
+% \emph{Another important aspect will be how the calibration DB identifies chunks of time. We discussed making boundaries at lumi blocks corresponding to electron beam fills that are expected to happen at about 1Hz.}
+
+% \emph{Need estimate of size of calibration DB/year of operation. This will be small compared to raw data, but since it will be maintained by different machines and software, it is worth breaking out.}
+
+
+Timely delivery of high-quality calibration is one of the main challenges for EIC experiments, in particular given that many EIC measurements will be systematic uncertainty driven [YR]. ECCE adopts a fixed-latency production model, which requires the final calibration within 2-3 weeks of data taking. This leads to the design of a semi-automatic calibration workflow with minimal human intervention. 
+
+\subsubsection{Calibration workflow}
+
+
+Similar to the architecture of the sPHENIX computing model, we envision offline computing center will provide a large incoming data buffer (e.g. 20PB as in the sPHENIX) that allows raw data to be used for reconstruction within 2-3 weeks of data taking, during which calibration will take place. The calibration tasks and time scale are dependent on the detector subsystems: 
+
+\begin{itemize}
+\item Tracker hit: amplitude and time offset of each tracker channel will be aligned to a uniform response using an assemble of collision events. We expect the initial calibration is delivered within two weeks of data taking with frequent checks and updates when needed. 
+item Particle ID, which will require gain and time calibration
+\begin{itemize}
+  \item The single-photon and multi-photon per pixel hit from signal hit and noises will be used to set the gain. We expect a rapid turnaround for calibration and monitoring of the gain ($<$1 day)
+  \item The time offset calibration will be initially set by calibration pulse lasers, which is applied before the physics data taking. The final alignment requires collision events with high multiplicity tracks from the same events and aligning their projected collision time by adjusting timing shifts for each sensor, which will be part of the 4D alignment to be discussed at the end of the list. 
+\end{itemize}
+\item Calorimetric calibration, which will focus on gain calibration
+\begin{itemize}
+  \item Leading order calorimetric energy scale calibration will be performed during the production stage using the block 
+  \item QA database and SiPM gain database. 
+  \item The first iteration for the calorimetric energy scale will be based on cosmic data during the construction phase (e.g. sector testing) and pre-collision cosmic runs. This is expected to be completed before physics data taking
+  \item The second iteration of tower-by-tower energy scale variation calibration will be matching the energy slope of the calorimeter tower energy spectrum for the same eta slice.   This is expected to be completed within one week of physics data taking
+  \item The final energy scale iteration will utilize the collision data: 1) use DIS electron, pi0 and eta to dual photon decay to set the energy scale for the EMCal, 2) isolated hadronic shower to calibrate the e/h in EMcal and hadronic energy scale in the HCal, 3) single high SIDIS jet production to set calorimetric jet energy scale. This is expected to take one week of data ($O(100)$ Billion event) and one week of calibration. 
+  \item During the steady-state running, the tower-by-tower gain drift will be monitored and calibrated using LED flashes and SiPM temperature monitoring, which can be calibrated in about one hour during steady-state running. 
+\end{itemize}
+
+\item Full detector alignment: each detector will be surveyed before and after installation which provides the starting point of the alignment. 
+\begin{itemize}
+  \item The first iteration of alignment will use field-off data and cosmic data to adjust major pieces of the detector component to the final installed location. The time latency needed for this task is limited by the availability of such specialized data, but we expect this step is completed before the physics quality data taken at ECCE
+  \item The second iteration requires field-on physics quality collision data to provide the final high precision adjustment for the sensor locations and time offset (for TOF) to a small fraction of the resolution. The first period of magnetic-field-on collision data will be used for this alignment. Generic purpose global alignment package such as Millepede II will be used. It is expected to take two weeks to complete the iteration of alignment and checks. 
+  \item Steady-state updates: vertex tracker require O(1)~$\mu$m level of alignment, which could drift over a long period. Therefore, during steady-state running, we expect alignment to be checked every few days and possibly updated every week, depending on the final mechanical stability. We expect steady-state alignment updates can be achieved fast, within one hour (e.g. LHCb vertex tracker is aligned in a few minutes). 
+\end{itemize}
+
+\end{itemize}
+
+\subsubsection{Calibration database}
+
+For the ECCE streaming DAQ, we expect the calibration record is time-stamped with a 64-bit beam crossing counter with the start and end time of the validity window. The validity window length will be detector and calibration type-dependent, but we expect they align with the luminosity block of ECCE streaming data that is at the order of magnitude of 1s, at each of the electron ring bunch refills. 
+
+The size of the calibration data is much smaller than the raw data but still sizable. For the highest channel count for the silicon vertex tracker (O(1)B channels), we do not expect it to have frequent calibration as it presents boolean (hit/no-hit) pixel data. In a conservative estimation, consider 300 thousand of the calorimeter, tracker, and PID channels require a frequent (1 per minute) update of a relative gain and time shift, each represented by a 4-Byte float number. This gives an overall calibration dataset size of $O(1)$~TB per run year (8B*(300e3 chan)*60(second)*24(hour)*7(week)*20(PAC run week)). 
+
+The calibration data will be indexed in a relational database. The actual calibration data file can be in a distributed file server (e.g.\ S3 or XROOTD) or in a separated database table, depending on the size per entry and frequency of calibration update. The separation of index database and calibration data payload allows for efficient database implementation management that is capable of accommodating a possible large size of the calibration data. This approach is being deployed in the sPHENIX fix latency calibration and reconstruction.
+
+At the start of a production job, the job manager will pull the calibration data relevant for the job into the local disk buffer according to the index table. Then the database is disconnected and job processing starts to efficiently utilize the connection limit to the database. This also allows the flexibility to pre-assemble the calibration file package to be sent with raw data to remote computing centers that are otherwise disconnected from the ECCE database and file servers. 
+
+
+
+
+
 %- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 \subsection{Simulation}
 
-\textbf{\emph{Cameron D.}}
+%\textbf{\emph{Cameron D.}}
 
-\emph{Assume simulation will be done with GEANT4. Work is starting that will implement task-level parallelism to GEANT4 with support for GPUs (Makoto Asai). Should we build in multiple major development cycles to allow us to incorporate these new features as they become available?}
+%\emph{Assume simulation will be done with GEANT4. Work is starting that will implement task-level parallelism to GEANT4 with support for GPUs (Makoto Asai). Should we build in multiple major development cycles to allow us to incorporate these new features as they become available?}
 
-\emph{Open questions include:}
-\begin{itemize}
-    \item \emph{Geometry definition and versioning}
-    \item \emph{Integration of Simulation and Reconstruction software}
-\end{itemize}
+%\emph{Open questions include:}
+%\begin{itemize}
+%    \item \emph{Geometry definition and versioning}
+%    \item \emph{Integration of Simulation and Reconstruction software}
+%\end{itemize}
 
-\emph{Discuss global campaigns and support for local simulations by collaboration members.}
+%\emph{Discuss global campaigns and support for local simulations by collaboration members.}
 
-\emph{Need estimates on amount of CPU/GPU needed for simulation per year. }
+%\emph{Need estimates on amount of CPU/GPU needed for simulation per year. }
+
+	All modern high energy physics experiments require highly detailed detector simulations, both in the design and running phases. The volume of simulations required depends on their specific uses, from small scale simulations with hundreds of events to study new sub-detector systems to large scale simulations with over 100 million events to understand physics capabilities. With this in mind, the ECCE philosophy towards simulations is user-friendliness, modularity and no distinction between large and small scale simulations to avoid disparities. 
+	
+	The current framework is capable of performing simulations from the generator stage right up to final physics analysis, with intermediate stages for detector simulation, responses, and track, PID and calorimeter reconstruction. This benefits users by allowing them to run a full analysis chain in one step and large scale productions by breaking simulations down into a series of stages. The latter approach improves throughput and reproducability as the same generator-level events can be run over different detector configurations or more physics objects can be added later in time.
+	
+	The framework has several inbuilt event generators (a particle gun, \textsc{Pythia6} \cite{Sjostrand:2000wi}, \textsc{Pythia8} \cite{sjostrand2008brief} and \textsc{Sartre}~\cite{toll2014dipole}) and can also read in pre-generated events either via the EIC-smear program~\cite{eicsmear} or a file in \textsc{HepMC2} format~\cite{dobbs2001hepmc}. The framework is also capable of reading in any previously produced DST, assuming the material hits were saved. If any generated particle has not been decayed by the input generator and is required to decay in the detector volume, this is handled by the built-in \textsc{Pythia6} decayer. 
+	
+	The detector simulation is handled by \textsc{Geant4}~\cite{Agostinelli:2002hh}. The components of the detector can either be render in what is called "fast" or "full" simulation. Fast simulation is very useful for producing passive volumes such as support or service structures, or testing ideas quickly. Full simulation involves complete physics responses and digitization, this includes but is not limited to Cherenkov photon production and electron cascades. 
+	
+	Efforts are on-going to improve both our simulations, through work conducted with co-design\footnote{See section ~\ref{sec:codesign}}, and the infrastructure needed to produce large simulations on short time scales such as with distributed computing and GPU implementation of \textsc{Geant4}. Each individually simulated subsystem is bundled with the software stack which means it is also saved weekly and with every production build. This allows any simulation to be reproduced at a future date, if necessary. 
+	
+	The ECCE consortium conducted two large scale production campaigns in 2021; the first campaign consisted of over 120 million events while the second campaign consisted of over 200 million events. The campaigns were distributed over 3 distinct production sites; SDCC at Brookhaven National Laboratory, the iFarm at Thomas Jefferson National Accelerator Facility and MIT Bates Research and Engineering Center. The production sites used a common top-level program which is able to communicate with site-specific lower level programs. With this and the common simulation framework, production tasks can be assigned to any site and down-time at one site can be recovered with a different site. As the only difference between the sites is in the batch systems, each production site is capable of creating output files and directories in identical formats and hence the production location is transparent to end users. Finally, the simulation seeds are uniquely defined by the input options (input file name, number of events to generate and starting event number of the input file) so any site can precisely reproduce any file from the other sites which aids in both debugging and general event production.
+
+	The second simulation campaign is a far more mature design compared to the first campaign with full PID, calorimeter responses, optimal detector placements and support structures. Thus, this campaign is useful for bench-marking the simulations memory usage and processing times. By comparing several large productions, it was found that the average time to produce a single $ep$ event with a 10~GeV electron beam and 100~GeV proton beam using the in-built \textsc{Pythia8} generator is 7.8\,s with a standard deviation of 2.2\,s\footnote{These events involved generator level production, detector simulation, digitization, reconstruction (track, PID and calorimeter) and physics analysis output}. This value was obtained by studying approximately 20 million events, grouped into production jobs of 2000 events each and taking the average run time of each job. Thus, this number also includes the start up of the framework but this impact should be minimized by using the average of 2000 events. Similarly, the average memory usage of a job was found to be stable regardless of the number of events that were produced in each job. A small variation in run time is seen with respect to the collision energies which is expected; when the beam energies increase, the event multiplicity increases and hence there are more objects to simulate and reconstruct. This can be seen by simulating $ep$ collisions with a 18~GeV electron beam and 275~GeV proton beam using an external \textsc{Pythia6} generator and the internal EIC-smear reader which found an average event production time of 9.7\,s with a standard deviation of 3.3\,s. This is also reflected in the simulation memory usage where the collisions with a 10~GeV electron beam and 100~GeV proton beam had an average memory usage of 2138\,MB with a standard deviation of 16\,MB while a 18~GeV electron beam and 275~GeV proton beam had an average memory usage of 2275\,MB with a standard deviation of 32\,MB. It is also expected that the overall memory footprint will be reduced through code optimisation and new hardware. For example, it has already been demonstrated in sPHENIX (which shares the same framework) that the mean memory usage for $pp$ simulations can be reduced from 4\,GB to 1.7\,GB by selective loading of simulated materials. Currently, ECCE simulations load every material described in \textsc{Geant4} into memory. The distributions for event run time and memory use are given in Figure \ref{fig:sim_jobs}.
+	
+	\begin{figure}[!htbp]
+		\begin{center}
+			\includegraphics[width=0.49\textwidth]{figs/simulation_runTime.pdf}
+			\includegraphics[width=0.49\textwidth]{figs/simulation_memory.pdf}
+		\end{center}
+		\caption{\small The per-event run time (left) and per-job memory usage (right) for two different productions. $ep$ collisions with a 10~GeV electron beam and 100~GeV proton beam using an internal \textsc{Pythia8} generator are shown with red triangles while $ep$ collisions with a 18~GeV electron beam and 275~GeV proton beam using an internal \textsc{Pythia6} generator are shown with  blue diamonds.  As each entry in the run time is the average time to produce 2000 events the multiple peaks for each production is believed to be due to hardware used to process the job on the batch farm.}\label{fig:sim_jobs}
+	\end{figure}
+
+The campaigns performed in 2021 can be used to estimate the simulation requirements for the forthcoming years. These estimates are given in Table \ref{tab:sim_predictions} and assumes that the largest production will occur in 2022 based on reviewers suggestions and will steadily decrease as detector R$\&$D progresses.
+
+\begin{table}[!htbp]
+	\centering
+	\begin{tabular}{c|c|c|c}
+		\hline
+		Year & Number of Events [$\times 10^{6}$] & Storage [TB] & CPU hours [kHours] \\
+		\hline
+		\hline
+		2022 & 200 & 50 & 450\\
+		2023 & 100 & 25 & 225 \\
+		2024 & 100 & 25 & 225 \\
+		2025 & 50 & 12.5 & 110 \\
+		\hline
+		\hline
+		\textbf{Total} & 450 & 112.5 & 1010 \\
+		\hline
+	\end{tabular}
+	\caption[]{Estimated simulation requirements for the years 2022 - 2025. The estimates are based on the observed performance in 2021 and only include large scale productions.}
+	\label{tab:sim_predictions}
+\end{table}

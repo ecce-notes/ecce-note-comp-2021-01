@@ -1,23 +1,68 @@
 %- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 \subsection{Data Acquisition}
-
 \textbf{\emph{Jan B.}}
 
-\emph{This section does not need to go into complete detail on the DAQ system (that should be in a different document). This should include the global picture (see slide 5 of Jin's intro talk at AI4EIC or slide 3 of Fernando's talk). What is needed here is the expected overall data rate and how many streams. The current plan is to implement a first stage HLT which may or may not require full event building. This section will need to include an estimate of how much reduction the first stage HLT will provide (i.e. what is the data rate going into the calibration system.}
+We envision a DAQ system following a streaming readout paradigm. In the following, we will describe the individual components as well as the overall data flow and bandwidth model. An overview of the system is shown in Figure \ref{fig:data_acquisition_diagram}.
 
-\emph{Also, do we implement the first stage HLT in FPGAs or on CPU/GPU? Need estimates on how much compute resource will be needed for first stage HLT.}
-
-%--------------------------------------------------------------------
-Figure \ref{fig:data_acquisition_diagram} illustrates a concept of the data acquisition system with some estimated rates.
 
 \begin{figure}[hbt!]
  \begin{center}
-   \raisebox{0.5mm}{\includegraphics[trim=50 30 50 30, clip, width=0.99\linewidth]{figs/figure_data_acquisition_diagram.pdf}}
-  \caption[Data Acquisition Diagram]{\label{fig:data_acquisition_diagram} Diagram of a Data Acquisition system. This is reproduced from slides shown at AI4EIC 2021\cite{EIC_readout_overview_AI4EIC_2021}. }
+  % \raisebox{0.5mm}{\includegraphics[trim=50 30 50 30, clip, width=0.99\linewidth]{figs/figure_data_acquisition_diagram.pdf}}
+  \input{figs/daqoverview}
+  
+  \caption[Data Acquisition Diagram]{\label{fig:data_acquisition_diagram} The DAQ electronics deployment can be roughly divided by their location, with FEE modules on/near the detector, data aggregators in the hall, and online filtering and monitoring in the counting room. Long term storage and analysis processing is performed in a federated model on multiple sites. }
+  %\caption[Data Acquisition Diagram]{\label{fig:data_acquisition_diagram} Diagram of a Data Acquisition system. This is reproduced from slides shown at AI4EIC 2021\cite{EIC_readout_overview_AI4EIC_2021}. }
  \end{center}
 \end{figure}
 
-%- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-\subsection{Monitoring}
 
-Hydra\cite{Hydra2021}
+\subsection{DAQ components}
+ Front-end electronics (FEE) modules sit inside or on the detector. In most cases, detector-specifc ASICs provide the data conversion from the analog to digital domain, do zero-suppression and provide an interface to fiber transceivers for data transport to the counting room.  There, we envision FELIX-type PCIe-based receiver cards\footnote{In the following, we will use "FELIX card" as a stand-in for a successor board of similar architecture.} which support a large number of high speed fiber links per card.  
+
+Since some FEE may not utilize the full bandwidth of a fiber link, cost-effective stream aggregator boards (SAGs), based either on small FPGAs or COTS multiplexer ICs, can bundle multiple fiber links coming from FEE to a single fiber to the FELIX cards. 
+
+Because of space and services constraints, or because no suitable ASIC is available, some FEEs will connect to Front end processor (FEP) modules via digital (LVDS) or analog links. The FPGA and possibly analog to digital converter logic on the FEP will then provide generate a data stream suitable for fiber transport to the FELIX cards.
+
+In the counting room, we expect a number of special servers which house the FELIX cards. Each FELIX/CPU combination sees data from a certain subset of detector channels and can do additional data reduction before sending out the data to the counting room CPU farm. This CPU farm (with possibly GPU accelerators) will do further data reduction, for example via high level data selection algorithms.
+
+The data streams are buffered on local hard disks, with enough capacity to store the data for several days. This local buffer has multiple functions: 
+\begin{itemize}
+    \item It averages out the changes in data rate from luminosity changes so that the upstream link only need to provide average, not peak, bandwidth.
+    \item It allows stand-alone operation for a limited time when the data transport out of the counting house is not available or runs at reduced capacity.
+    \item It allows for near-online monitoring and replay of recent data for quality control, especially for those quantities which depend on on-going calibrations.        
+\end{itemize}
+
+The data are then pushed upstream to on-site or federated storage as part of the overall EIC project.
+
+
+\subsection{Online monitoring}
+Online monitoring is divided into a fast path with bound latency and a slow path. The former path supports the requirements for accelerator steering and equipment protection with regards to possible reaction time. The data is either generated on the FELIX host CPUs or on the FELIX card themselves. Necessarily, they are limited in scope to counting, summing or similar type of information. The slow path provides higher-level information for quality control. Here, its is possible to reconstruct and analyse full events on-the-fly, by copying pre-selected time segments from the data stream to the analysis sub-cluster. Note here that such a monitoring system does not require the guaranteed reconstruction of all data, just of a suitable subset. That subset can either be selected unbiased by selecting periodic time segments, or biased by selecting time-segments tagged by data filters in the main data stream.  Similar monitoring can be performed on data on the local buffer for those quantities which require calibration data or two-pass analysis.
+
+% DL
+For both types of data a system will be needed to evaluate the monitoring data and inform the experiment operators of potential issues. This will largely include the creation of histograms which may be monitored either graphically or by some automated means. The prevalence of AI will certainly play a large role in that it will be able to evaluate a wider variation of monitoring data and at a much higher rate than could be expected of humans. Such systems are already deployed and under development\cite{Hydra2021}. 
+
+\subsection{Risk mitigation}
+We expect that during initial commissioning noise rates will be significantly higher than during established operation, as accelerator and detector parameters will not yet be tuned optimally. Such high noise rates might overwhelm processing and upstream write capability. To allow progress in this initial phase, the DAQ system will allow to input a bounded-latency signal on the FELIX card or host cpu level to suppress uninteresting time segments.
+
+Such a system also allows us to simply incorporate a dedicated collision detector for rate reduction: only time segments which are flagged to have a collision are kept, others are dropped early in the processing chain. 
+
+This bounded-latency system could either be realized as a classic electrical trigger signal, or via software messages sent to the FELIX hosts with a clear advantage with regard to flexibility and ease of implementation, but with possibly are larger latency. The optimal implementation depends on the capabilities of the future FELIX successor and bandwidth availability on the FELIX host servers.
+
+\subsection{Expected data rates and reduction steps}
+
+\emph{JCB: I'm not sure how valid these numbers are.}
+
+Since connections between detector and FEPs might not be zero suppressed digital or even analog data, it makes no sense to specify a data rate at the detector-to-hall border. Instead, the following section describes the expected data rate on the Fiber/FELIX level and downstream from there.
+
+At nominal luminosity, we expect that true signals and beam-gas interactions produce a total rate of $\mathcal{O}$(100 Gbps) of zero-suppressed data at the FELIX card level. However, detector noise and additional backgrounds, especially during early operation, can completely dominate this rate. We assume therefore a total rate of $\mathcal{O}$(10 Tbps) bandwidth on the fiber level. Next-gen FELIX cards will have 25 GBps receivers, for headroom for burst rates, non-ideal allocation of detector channels to fibers \emph{etc.}, we assume 12.5 GBps as the average rate per fiber, and as a consequence, about 800 fibers.
+
+A current-generation FELIX card as 48 fiber ports, leading to $\mathcal{O}$(20) FELIX cards. Each card would then receive 600 GBps. We assume that at the time of procurement for EIC, cards with at least PCIex Gen5 are available, providing 500 GBps to the host server, requiring a modest reduction of the data rate in FELIX card itself, for example via cross-channel noise reduction. In combination with the host CPU, we expect a total reduction by a factor of 5 to $\mathcal{O}$(2) Tbps total, 100 GBps per server. We note that a typical server with 128GB of memory can buffer the full stream for about 2 seconds, ample time for region-of-interest/time-slice-of-interest communication between the FELIX hosts, making higher reduction factors likely. The data can then be streamed out via a dual 100 Gbps link to the second layer in the compute farm.
+
+In the compute farm, the data is further analyzed and filtered. We expect that with inter-detector noise suppression and high-level data selection the required effective bandwidth to long-term storage can be reduced to $\mathcal{O}$(100) Gbps.  
+
+
+
+%--------------------------------------------------------------------
+
+
+
