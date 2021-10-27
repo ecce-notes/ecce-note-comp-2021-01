@@ -13,6 +13,11 @@
                            
 \documentclass[12pt,twoside]{article}
 
+%-----------
+\usepackage{array}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+
 %%%%%%%%%%%%%%%%
 % Adding the include only list allows you to typeset only your
 % chapter while maintaining overall page numbers and references.
@@ -56,11 +61,11 @@
 \label{sec:introduction}
 \input{sec_introduction}
 
-\section {Artificial Intelligence/Machine Learning}
+\section {Artificial Intelligence} %/Machine Learning
 \label{sec:ai}
 \input{sec_AI}
 
-\section {Detector and Program Development [...]}
+\section {Detector and Program Development}
 \label{sec:detector_development}
 \input{sec_detector_development}
 
