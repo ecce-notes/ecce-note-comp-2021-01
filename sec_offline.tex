@@ -1,5 +1,5 @@
 
-\textbf{\emph{David L.}}
+%\textbf{\emph{David L.}}
 
 Offline software encompasses many aspects of the experiment. This includes a number of systems, each of which requires either new development or implementation of existing systems using dedicated experts(s). These include:
 
@@ -12,12 +12,12 @@ Offline software encompasses many aspects of the experiment. This includes a num
     \item Reconstruction workflow (HPC/HTC job management)
 \end{itemize}
 
-In the following sections we describe some of these that will constitute larger efforts in terms of person-hours. It should be noted that at this time certain technology choices seem likely (e.g. GEANT4~\cite{ALLISON2016186}). However, others such as the choice of database systems, file formats, and software frameworks are purposefully left unspecified at this point in time.
+In the following sections we describe some of these that will constitute larger efforts in terms of person-hours. It should be noted that at this time certain technology choices seem likely (e.g. GEANT4~\cite{ALLISON2016186}). However, others such as the choice of specific database systems, file formats, and software frameworks are purposefully left unspecified at this point in time.
 
 %- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 \subsection{Reconstruction}\label{subsec:reconstruction}
 
-\textbf{\emph{Joe O.}}
+%\textbf{\emph{Joe O.}}
 
 In the past several decades, many reconstruction frameworks have been developed by different experiments within both HEP and NP. Several features stand out as common to all of these, which the ECCE software framework must utilize. The most important of these are modularity and user friendliness, as any large HEP/NP collaboration will necessarily comprise many hundreds of scientists with varying levels of software expertise. Therefore, these, and other generic features of excellent software, will be essential. It will additionally be imperative to recognize that software technologies change rapidly, and the ability for the software ecosystem to pivot with ease will be essential. As an example, while \texttt{git} is the de facto modern standard for code versioning and storage, it is impossible to say what versioning technologies will exist ten or more years from now when the EIC will be taking data. ECCE has not committed itself to a particular software ecosystem yet; however, these discussions will need to begin in early 2022 as these decisions will need to be made in preparation for development of a TDR.
 
@@ -28,24 +28,24 @@ Making software user friendly requires that it is distributed in a convenient wa
 The role of hybrid architectures should also be considered in the ECCE reconstruction framework. Specifically, the use of GPU architectures will be important both for integrating machine learning into reconstruction workflows as well as generically taking advantage of the significant computational speed improvements that GPUs can provide. This integration has the added benefit of potentially utilizing the various leadership computing facilities that are available at national laboratories around the country, for more see Section~\ref{sec:offsite}.
 
 
-Based on the experience of other experiments, reconstruction software should also take advantage of common software projects that are deployed across the world. For example, the A Common Tracking Software (ACTS) package, initially designed for use at the HL-LHC, has been implemented into the sPHENIX track reconstruction framework~\cite{Osborn:2021zlr}. Several collider-physics-based open source projects exist within the broader HEP community and have recently grown in in their user base, examples include ACTS~\cite{Ai:2021ghi}, Rucio~\cite{Barisits:2019fyl}, PanDA, Fun4All~\cite{fun4allGithub}, Gaudi~\cite{Gaudi}, and others. These should be evaluated for use within the ECCE software stack in early 2022 as a part of the decision making process for the future of the offline software framework.
+Based on the experience of other experiments, reconstruction software should also take advantage of common software projects that are deployed across the world. For example, the A Common Tracking Software (ACTS) package, initially designed for use at the HL-LHC, has been implemented into the sPHENIX track reconstruction framework~\cite{Osborn:2021zlr}. Several collider-physics-based open source projects exist within the broader HEP community and have recently grown in in their user base, examples include ACTS~\cite{Ai:2021ghi}, Rucio~\cite{Barisits:2019fyl}, PanDA, Fun4All~\cite{fun4allGithub}, JANA~\cite{jana2_chep19}, Gaudi~\cite{Gaudi}, and others. These should be evaluated for use within the ECCE software stack in early 2022 as a part of the decision making process for the future of the offline software framework.
 
 %\emph{This section should focus on the features that are needed for the reconstruction framework. This should avoid committing to a particular software package at the moment. That is a discussion/decision we should have in early 2022 and I think this section can state that explicitly. Features that will be needed should be driven by HTC system requirements. Specifically, the ability to parallelize both vertically and horizontally. Use of heterogeneous hardware. Containerization and distribution(e.g. CVMFS) should also be discussed. Another general issue is how to distribute calibration and meta-data to potentially 100k jobs without them all hitting a single central server at once. Provisioning for multiple, replicated servers would be appropriate here.}
 
 %\emph{This will need standard statements about modularity and user friendliness of the framework. I think it would be safe to state that we expect the primary language to be C++ while not excluding the integration of other languages.}
 
-\emph{Need estimates of total CPU}
+%\emph{Need estimates of total CPU}
 
 %- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 \subsection{Calibration}
 
-\textbf{\emph{Jin H.}}
+%\textbf{\emph{Jin H.}}
 
-\emph{The calibration system will be integrated into the Online/DAQ with the goal being to to produce calibrations in ``real time'' a'la LHCb. This should give some details included expected latency/disk space, etc.}
+%\emph{The calibration system will be integrated into the Online/DAQ with the goal being to to produce calibrations in ``real time'' a'la LHCb. This should give some details included expected latency/disk space, etc.}
 
-\emph{Another important aspect will be how the calibration DB identifies chunks of time. We discussed making boundaries at lumi blocks corresponding to electron beam fills that are expected to happen at about 1Hz.}
+%\emph{Another important aspect will be how the calibration DB identifies chunks of time. We discussed making boundaries at lumi blocks corresponding to electron beam fills that are expected to happen at about 1Hz.}
 
-\emph{Need estimate of size of calibration DB/year of operation. This will be small compared to raw data, but since it will be maintained by different machines and software, it is worth breaking out.}
+%\emph{Need estimate of size of calibration DB/year of operation. This will be small compared to raw data, but since it will be maintained by different machines and software, it is worth breaking out.}
 
 %---------- Pasting Jin's section from the old overleaf (C. Fanelli)
 
@@ -67,7 +67,7 @@ Timely delivery of high-quality calibration is one of the main challenges for EI
 Similar to the architecture of the sPHENIX computing model, we envision offline computing center will provide a large incoming data buffer (e.g. 20PB as in the sPHENIX) that allows raw data to be used for reconstruction within 2-3 weeks of data taking, during which calibration will take place. The calibration tasks and time scale are dependent on the detector subsystems: 
 
 \begin{itemize}
-\item Tracker hit: amplitude and time offset of each tracker channel will be aligned to a uniform response using an assemble of collision events. We expect the initial calibration is delivered within two weeks of data taking with frequent checks and updates when needed. 
+\item Tracker hit: amplitude and time offset of each tracker channel will be aligned to a uniform response using an ensemble of collision events. We expect the initial calibration is delivered within two weeks of data taking with frequent checks and updates when needed. 
 \item Particle ID, which will require gain and time calibration
 \begin{itemize}
   \item The single-photon and multi-photon per pixel hit from signal hit and noises will be used to set the gain. We expect a rapid turnaround for calibration and monitoring of the gain ($<$1 day)
@@ -79,7 +79,7 @@ Similar to the architecture of the sPHENIX computing model, we envision offline 
   \item QA database and SiPM gain database. 
   \item The first iteration for the calorimetric energy scale will be based on cosmic data during the construction phase (e.g. sector testing) and pre-collision cosmic runs. This is expected to be completed before physics data taking
   \item The second iteration of tower-by-tower energy scale variation calibration will be matching the energy slope of the calorimeter tower energy spectrum for the same eta slice.   This is expected to be completed within one week of physics data taking
-  \item The final energy scale iteration will utilize the collision data: 1) use DIS electron, pi0 and eta to dual photon decay to set the energy scale for the EMCal, 2) isolated hadronic shower to calibrate the e/h in EMcal and hadronic energy scale in the HCal, 3) single high SIDIS jet production to set calorimetric jet energy scale. This is expected to take one week of data ($O(100)$ Billion event) and one week of calibration. 
+  \item The final energy scale iteration will utilize the collision data: 1) use DIS electron, $\pi^{\circ}$ and $\eta$ to $\gamma \gamma$ decay to set the energy scale for the EMCal, 2) isolated hadronic shower to calibrate the e/h in EMcal and hadronic energy scale in the HCal, 3) single high SIDIS jet production to set calorimetric jet energy scale. This is expected to take one week of data ($O(100)$ Billion event) and one week of calibration. 
   \item During the steady-state running, the tower-by-tower gain drift will be monitored and calibrated using LED flashes and SiPM temperature monitoring, which can be calibrated in about one hour during steady-state running. 
 \end{itemize}
 
@@ -98,7 +98,7 @@ For the ECCE streaming DAQ, we expect the calibration record is time-stamped wit
 
 The size of the calibration data is much smaller than the raw data but still sizable. For the highest channel count for the silicon vertex tracker (O(1)B channels), we do not expect it to have frequent calibration as it presents boolean (hit/no-hit) pixel data. In a conservative estimation, consider 300 thousand of the calorimeter, tracker, and PID channels require a frequent (1 per minute) update of a relative gain and time shift, each represented by a 4-Byte float number. This gives an overall calibration dataset size of $O(1)$~TB per run year (8B*(300e3 chan)*60(second)*24(hour)*7(week)*20(PAC run week)). 
 
-The calibration data will be indexed in a relational database. The actual calibration data file can be in a distributed file server (e.g.\ S3 or XROOTD) or in a separated database table, depending on the size per entry and frequency of calibration update. The separation of index database and calibration data payload allows for efficient database implementation management that is capable of accommodating a possible large size of the calibration data. This approach is being deployed in the sPHENIX fix latency calibration and reconstruction.
+The calibration data will be indexed in a relational database. The actual calibration data file can be in a distributed file server (e.g.\ S3 or XROOTD) or in a separated database table, depending on the size per entry and frequency of calibration update. The separation of index database and calibration data payload allows for efficient database implementation management that is capable of accommodating a possible large size of the calibration data. This approach is being deployed in the sPHENIX fixed latency calibration and reconstruction.
 
 At the start of a production job, the job manager will pull the calibration data relevant for the job into the local disk buffer according to the index table. Then the database is disconnected and job processing starts to efficiently utilize the connection limit to the database. This also allows the flexibility to pre-assemble the calibration file package to be sent with raw data to remote computing centers that are otherwise disconnected from the ECCE database and file servers. 
 

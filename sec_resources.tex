@@ -1,7 +1,57 @@
 
-\textbf{\emph{?}}
+%\textbf{\emph{?}}
 
-\emph{This needs to pull in numbers from the other sections and summarize the total needs in a couple of tables. These tables will be copied into the ECCE proposal.}
+%\emph{This needs to pull in numbers from the other sections and summarize the total needs in a couple of tables. These tables will be copied into the ECCE proposal.}
+
+The EIC luminosity is projected to be between $10^{33}cm^{-2}s{-1}$ and $10^{34}cm^{-2}s{-1}$ (see sec. 2.10 of the Yellow Report\cite{eic_yellow_report_v1_1}). Assume 30 weeks of operation per year and 60\% accelerator operation efficiency once it is in full production mode. In the first years, however, we may expect fewer weeks of running and lower luminosity. Table \ref{tab:integrated_luminosity_by_year} lists a possible scenario used for the purposes of estimation in this section. We assume 100Gbps data rate to storage for $10^{34}cm^{-2}s{-1}$ and 60\% operational efficiency of the facility. All other rates are derived by scaling this value by the luminosity and efficiency values indicated in the table.
+
+
+\begin{table}[htb!]
+    \centering
+    \begin{tabular}{c|c|c|c}
+        \hline
+        \hline
+         \textbf{New Storage}       & year-1                & year-2                  & year-3                \\
+        \hline
+         Luminosity              & $10^{33}cm^{-2}s{-1}$ & $2x10^{33}cm^{-2}s{-1}$ & $10^{34}cm^{-2}s{-1}$ \\
+         \hline
+         Weeks of Running        & 10                    & 20                      & 30                    \\
+         \hline
+         Operational efficiency    & 40\%                  & 50\%                    & 60\%                  \\
+         \hline
+         Data Rate to Storage    & 6.7Gbps               & 16.7Gbps                & 100Gbps               \\
+         \hline
+         Raw Data Storage (no duplicates) & 4PB          & 20PB                    & 181PB                 \\
+         \hline
+         Recon Storage          & 0.4PB                  & 2PB                    & 18PB                   \\
+         \hline
+         Total Storage (no duplicates) & 4.4PB           & 22PB                   & 200PB                  \\
+         \hline
+   \end{tabular}
+    \caption{Estimate of raw data tape storage needed for first 3 years of EIC running (ECCE only). Values are estimates assuming ramp up to full luminosity  by year 3. Numbers for the first two years are estimated for the purposes of this exercise and do not come from an external source. n.b. each values represents \emph{only} the needs for data produced in that year and \emph{not} a cumulative total.}
+    \label{tab:integrated_luminosity_by_year}
+\end{table}
+
+Temporary disk storage will be needed for raw data during the 3 week time span during which calibrations are derived and the raw data processed. In addition, disk storage will be needed for the reconstructed data that collaborators will be accessing for analysis. Table \ref{tab:disk_summary} gives estimates of the disk resources needed for the first 3 years of running. Note that the values in that table are cumulative and so represent the total amount of disk needed for each year which include recon data from previous years.
+
+
+\begin{table}[htb!]
+    \centering
+    \begin{tabular}{c|c|c|c}
+        \hline
+        \textbf{Total Disk} & year-1 & year-2 & year-3 \\
+        \hline
+        \hline
+        Disk (temporary)  &  1.2PB & 3.0PB & 18.1PB \\
+        \hline
+        Disk (permanent)    & 0.4PB & 2.4PB &	20.6PB \\
+        \hline
+        \textbf{TOTAL}          & 1.6PB &	5.4PB &	38.7PB \\
+        \hline
+    \end{tabular}
+    \caption{Estimate of disk storage needed for first 3 years of EIC running (ECCE only). The temporary disk is used to hold raw data for a 3 week period while calibrations are derived and reconstruction is done. The permanent disk is for holding the reconstructed data. This will be cumulative so collaborators will have access to recon data from all years.}
+    \label{tab:disk_summary}
+\end{table}
 
 \begin{table}[htb!]
     \centering
@@ -49,23 +99,3 @@
 \end{table}
 
 
-
-\begin{table}[htb!]
-    \centering
-    \begin{tabular}{c|c|c|c}
-        \hline
-        Storage(PB) & year-1 & year-2 & year-3 \\
-        \hline
-        \hline
-        Disk (work)    & & & \\
-        \hline
-        Disk (cache)    & & & \\
-        \hline
-        Tape (incl. duplicates)    & & & \\
-        \hline
-        \textbf{TOTAL} & & & \\
-        \hline
-    \end{tabular}
-    \caption{Caption}
-    \label{tab:storage_summary}
-\end{table}

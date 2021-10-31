@@ -1,6 +1,6 @@
 \subsection{Detector Optimization}
 \label{sec:codesign}
-\textbf{\emph{Cristiano}}
+%\textbf{\emph{Cristiano}}
 
 
 Detector optimization is an essential part of the R\&D and design process that involves mechanical design and budget to realize the best performance possible.  
@@ -40,7 +40,7 @@ A workflow of this framework is shown in Fig.~\ref{fig:dRICH_BO_scheme}, where m
     \centering
     \includegraphics[scale = 0.21]{figs/dRICH_BO_scheme.png}
     \caption{
-    Bayesian optimization framework for the optimization of the dual-RICH. N detector design points are created in parallel and passed to the BO which uses Gaussian processes, which collects the points, updates the surrogate model (a 2D visualization is shown in the bottom right corner considering all pairs of design parameters). A cheap acquisition function suggests new set of design points to query at the next iteration. Convergence criteria are implemented on both the design space and on the objective (in this case, the $\pi$/K separation power of the dual-RICH) and early stopping is activated when convergence is observed in both spaces. Figure taken from \cite{fanelli_jluo2021}. More details can be found in \cite{cisbani2020ai}.   
+    Bayesian optimization framework for the optimization of the dual-RICH. N detector design points are created in parallel and passed to the BO which uses Gaussian processes, which collects the points, updates the surrogate model (a 2D visualization is shown in the bottom right corner considering all pairs of design parameters). A cheap acquisition function suggests a new set of design points to query at the next iteration. Convergence criteria are implemented on both the design space and on the objective (in this case, the $\pi$/K separation power of the dual-RICH) and early stopping is activated when convergence is observed in both spaces. Figure taken from \cite{fanelli_jluo2021}. More details can be found in \cite{cisbani2020ai}.   
     }
     \label{fig:dRICH_BO_scheme}
 \end{figure}
@@ -50,7 +50,7 @@ Our approach deals with a complex optimization in a multidimensional design spac
 This framework has been developed for the optimization of the Inner Tracker of ECCE but can be utilized in principle for any other sub-detector or system of sub-detectors, provided a viable parametrization of the detector simulation. 
 
 The simulation and reconstruction relies on Fun4All \cite{fun4allGithub}, described later in Sec.~\ref{subsec:reconstruction}. 
-Different parametrization of the inner tracker design have been explored and most of our studies have been done with at least 11 parameters in the design space characterizing the location of the tracking layers in the central region and of the disks in the two endcaps (e-going and h-going directions), along with their dimensions and geometry. 
+Different parametrizations of the inner tracker design have been explored and most of our studies have been done with at least 11 parameters in the design space characterizing the location of the tracking layers in the central region and of the disks in the two endcaps (e-going and h-going directions), along with their dimensions and geometry. 
 Eventually the parametrization has been extended to include also the support structure in the design optimization problem.   
 Notice that potential overlaps among modules are checked before and during the optimization. 
 The different designs have been optimized with particle gun samples of pions and then studied and validated with independent data samples and physics analyses.  
@@ -61,7 +61,7 @@ In this context, we used a recently developed framework for MOO called pymoo \ci
 The NSGA workflow is described in Fig.~\ref{fig:NSGA_workflow}.
 The main features of NSGA-II are (i) the usage of an elitist principle, (ii) an explicit diversity preserving mechanism, and (iii) ability of determining non-dominated solutions. 
 %
-The latter feature is of great importance for problems where objectives are of conflict to each other, that is an improved performance in an objective results in worse performance in another objective.
+The latter feature is of great importance for problems where objectives are of conflict to each other, that is: an improved performance in an objective results in worse performance in another objective.
 
 \begin{figure}[!]
     \centering
@@ -102,7 +102,7 @@ Results are validated by looking at figures of merit that do not enter as object
     \includegraphics[scale = 0.25]{figs/improve_with_AI.png}
     \includegraphics[scale = 0.35]{figs/interplay.png}
     \caption{
-    Example of improvement in performance of the Inner Tracker barrel design during the detector proposal ascribable to Artificial Intelligence. AI took the red points (initial design) to green. The detector concept further evolved since then and AI improved it from black to blue by rearranging the geometry and dimensions of the components. It is clear that the fundamental interplay between the ECCE Teams working on Physics, Detector and Computing is propelled by AI in the design process. 
+    Example of improvement in performance of the Inner Tracker barrel design during the detector proposal ascribable to Artificial Intelligence. AI took the red points (initial design) to green. The detector concept further evolved since then and AI improved it from black to blue by rearranging the geometry and dimensions of the components. It is clear that the fundamental interplay between the ECCE Teams working on Physics(PWG), Detector(DWG) and Computing(CWG) is propelled by AI in the design process. 
 }
     \label{fig:improved_with_AI}
 \end{figure}
@@ -118,7 +118,7 @@ The reader should be reminded that a Pareto front is potentially made by a set o
 \end{figure}
 
 A complete list of the hyperparameters of our optimization framework can be found in Table \ref{tab:complexity}.
-With 11 variables and 3 objectives it has been estimated that about $\sim$10k CPUhours is needed to converge. 
+With 11 variables and 3 objectives it has been estimated that about $\sim$10k core-hours on CPU is needed to converge. 
 
 
 \begin{table}[!]
