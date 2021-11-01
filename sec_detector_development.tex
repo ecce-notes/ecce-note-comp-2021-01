@@ -79,12 +79,16 @@ Remarkably these approaches can accommodate mechanical and geometrical constrain
 A two-level parallelization has been implemented in the MOO framework: the first level creates the parallel simulations of design points, the second level parallelizes each design point. 
 The evaluation itself can be distributed to several workers or a whole cluster with libraries like Dask \cite{dask}.
 
+Computing time studies have been carried out to evaluate the simulation time of each single design point as a function of the number of tracks generated. 
+Similarly we made studies of the computing time taken by the AI-based algorithm in generating a new population of design points. 
+Results of these studies are summarized reported in Fig.~\ref{fig:computing-times}.  
+
 
 \begin{figure}[!]
     \centering
     \includegraphics[scale = 0.33]{figs/TimeHistROOT.pdf}
     \includegraphics[scale = 0.18]{figs/AI_time_study.png}
-    \caption{Computing time studies. (left) The simulation time of a single design point as a function of the number of tracks; (right) the computing time taken by the genetic algorithm and the sorting in NSGA-II. Performance have been benchmark with test problems like DTLZ1 and the scaling $\sim MN^{2}$ has been verified with convergence to the Pareto front. For the complexity of the problem described in Table \ref{tab:complexity}, the simulation time dominates the AI times. A two level parallelization has been introduced in the framework to reduce this bottleneck.  
+    \caption{Computing time studies. (left) The simulation time of a single design point as a function of the number of tracks; (right) the computing time taken by the genetic algorithm and the sorting in NSGA-II. Performance have been benchmark with test problems like DTLZ1 \cite{ishibuchi2016performance} and the scaling $\sim MN^{2}$ has been verified with convergence to the Pareto front. For the complexity of the problem described in Table \ref{tab:complexity}, the simulation time dominates the AI times. A two level parallelization has been introduced in the framework to reduce this bottleneck.  
     The AI contribution typically becomes dominant when very a large population size is needed for an accurate approximation of the Pareto front. 
 }
     \label{fig:computing-times}
@@ -99,8 +103,8 @@ Results are validated by looking at figures of merit that do not enter as object
 
 \begin{figure}[!]
     \centering
-    \includegraphics[scale = 0.25]{figs/improve_with_AI.png}
-    \includegraphics[scale = 0.35]{figs/interplay.png}
+    \includegraphics[scale = 0.26]{figs/improve_with_AI.png}
+    \includegraphics[scale = 0.36]{figs/interplay.png}
     \caption{
     Example of improvement in performance of the Inner Tracker barrel design during the detector proposal ascribable to Artificial Intelligence. AI took the red points (initial design) to green. The detector concept further evolved since then and AI improved it from black to blue by rearranging the geometry and dimensions of the components. It is clear that the fundamental interplay between the ECCE Teams working on Physics(PWG), Detector(DWG) and Computing(CWG) is propelled by AI in the design process. 
 }
@@ -118,7 +122,18 @@ The reader should be reminded that a Pareto front is potentially made by a set o
 \end{figure}
 
 A complete list of the hyperparameters of our optimization framework can be found in Table \ref{tab:complexity}.
-With 11 variables and 3 objectives it has been estimated that about $\sim$10k core-hours on CPU is needed to converge. 
+With 11 variables and 3 objectives it has been estimated that approximately $\sim$10k core-hours on CPU is needed to converge. 
+%
+This number is expected to grow with the complexity of the problem,  which is characterized by the number of design parameters and objectives. 
+%which in turn may require larger populations and more iterations to approach convergence and approximate the Pareto front. 
+%
+%%This approach can be further utilized 
+%%We describe our strategy and show preliminary results for the Si tracking system. 
+%
+Larger populations of design points can be simulated to improve accuracy of the Pareto front in multidimensional spaces with AI-based accelerated optimizations. 
+An interesting trend is scaling the MOO workflows on HPC systems \cite{liu2020parallelization}. 
+
+Remarkably the developed framework can be utilized for other sub-detectors, or systems of sub-detectors.
 
 
 \begin{table}[!]
@@ -139,18 +154,12 @@ With 11 variables and 3 objectives it has been estimated that about $\sim$10k co
         \small{\# bins in P} & N$_{\textup{P}}$ & 15 \\
         \hline
     \end{tabular}
-    \caption{Summary of the hyperparameters during the optimization. Symbols used throughout the document to describe these quantities are also reported to facilitate the reader. Values not in parentheses correspond to the optimization of a starting reference design. Values in parentheses are the largest ones utilized in other optimization pipelines. Checkpoints are created allowing to take a snapshot of the optimization while ongoing. A survey of the detector performance is created after each call. At each call an offspring of 30 to 50 new design points is created through a genetic algorithm. The framework ran on the JLab computing farm with a maximum number of 128 cores allocated.
+    \caption{Summary of the hyperparameters during the optimization. Symbols used throughout the document to describe these quantities are also reported to facilitate the reader. Values not in parentheses correspond to the optimization of a starting reference design. Values in parentheses are the largest ones utilized in other optimization pipelines. Checkpoints are created allowing to take a snapshot of the optimization while ongoing. A survey of the detector performance is created after each call. At each call an offspring of 30 to 50 new design points is created through a genetic algorithm. A two-level parallelization is implemented as explained in the text. The framework ran on the JLab computing farm which currently host nodes with a maximum number of 128 cores.
     }
     \label{tab:complexity}
 \end{table}
 
 
-%%This approach can be further utilized 
-%%We describe our strategy and show preliminary results for the Si tracking system. 
 
-Larger populations of design points can be simulated to improve accuracy of the Pareto front in multidimensional spaces with AI-based accelerated optimizations. 
-An interesting trend is scaling the MOO workflows on HPC systems \cite{liu2020parallelization}. 
-
-Remarkably the developed framework can be utilized for other sub-detectors, or systems of sub-detectors.
 
 \clearpage
