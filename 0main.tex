@@ -12,6 +12,7 @@
  
                            
 \documentclass[12pt,twoside]{article}
+\date{December 1, 2021}
 
 %-----------
 \usepackage{array}
@@ -29,45 +30,63 @@
 %%%%%%%%%%%%%%%%%%  header  (packages, 
 \input{header}
 
+\title{ECCE Computing Plan}
+\input{author_list}
+
+
 \begin{document}
-\linenumbers
 %\frontmatter
 %\pagestyle{empty} %Setting this to empty removes page numbers
-
+\pagestyle{empty}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% title page
 \include{title_page}
 
-%\cleardoublepage
-%\pagestyle{fancy}
+\cleardoublepage
+\pagestyle{plain}
+\maketitle
+\pagenumbering{roman}
 
-\setcounter{page}{1}
+%\setcounter{page}{1}
 
 %\clearpage
 %\cleardoublepage
 
 %\resetlinenumber
 
-\tableofcontents
+
 %\cleardoublepage
 
 %\mainmatter
 
-\renewcommand{\thepage}{\arabic{page}}
+%\renewcommand{\thepage}{\arabic{page}}
 %\setcounter{chapter}{0}
 %\setcounter{page}{1}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 2 Detector Overview
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\section* {Executive Summary}
+\label{sec:ExecutiveSummary}
+\input{sec_executive_summary}
+
+\clearpage
+\setcounter{tocdepth}{3}
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
 \section {Introduction}
 \label{sec:introduction}
 \input{sec_introduction}
 
-\section {Artificial Intelligence / Machine Learning} %/Machine Learning
-\label{sec:ai}
+% temporarily commented --- CF
+%\section {Artificial Intelligence / Machine Learning} %/Machine Learning
+%\label{sec:ai}
 \input{sec_AI}
 
-\section {Detector and Program Development}
-\label{sec:detector_development}
-\input{sec_detector_development}
+% temporarily commented --- CF
+%\section {Detector and Program Development}
+%\label{sec:detector_development}
+%\input{sec_detector_development}
 
 \section {Online}
 \label{sec:online}

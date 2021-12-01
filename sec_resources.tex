@@ -13,9 +13,9 @@ The EIC luminosity is projected to be between $10^{33}cm^{-2}s{-1}$ and $10^{34}
         \hline
          \textbf{New Storage}       & year-1                & year-2                  & year-3                \\
         \hline
-         Luminosity              & $10^{33}cm^{-2}s^{-1}$ & $2x10^{33}cm^{-2}s^{-1}$ & $10^{34}cm^{-2}s^{-1}$ \\
+         Luminosity              & $10^{33}cm^{-2}s^{-1}$ & $2\times10^{33}cm^{-2}s^{-1}$ & $10^{34}cm^{-2}s^{-1}$ \\
          \hline
-         Weeks of Running        & 10                    & 20                      & 30                    \\
+         Weeks of Physics Running        & 10                    & 20                      & 30                    \\
          \hline
          Operational efficiency    & 40\%                  & 50\%                    & 60\%                  \\
          \hline
@@ -23,9 +23,9 @@ The EIC luminosity is projected to be between $10^{33}cm^{-2}s{-1}$ and $10^{34}
          \hline
          Raw Data Storage (no duplicates) & 4PB          & 20PB                    & 181PB                 \\
          \hline
-         Recon Storage          & 0.4PB                  & 2PB                    & 18PB                   \\
+         Recon Storage          & 0.4PB                  & 2PB                    & 18PB                   \\ % <- assumed past estimation of 10%*250kB per event
          \hline
-         Total Storage (no duplicates) & 4.4PB           & 22PB                   & 200PB                  \\
+         Total Storage (no duplicates) & 7PB           & 35PB                   & 317PB                  \\
          \hline
    \end{tabular}
     \caption{Estimate of raw data tape storage needed for first 3 years of EIC running (ECCE only). Values are estimates assuming ramp up to full luminosity  by year 3. Numbers for the first two years are estimated for the purposes of this exercise and do not come from an external source. n.b. each value represents \emph{only} the needs for data produced in that year and \emph{not} a cumulative total.}
@@ -53,7 +53,7 @@ Temporary disk storage will be needed for raw data during the 3 week time span d
     \label{tab:disk_summary}
 \end{table}
 
-The CPU required for processing the data is very difficult to estimate with any accuracy better than the order of magnitude. Nonetheless, an attempt is made here to provide such a ballpark estimate. Table \ref{tab:cpu_summary} provides summarizes the important values. The 5.4s/ev comes from estimating an average of 3 hours for reconstruction of 2k events of ECCE data. The numbers for ECCE CPU mainly come from the simulation campaigns run for proposal development which include combined simulation and reconstruction. The times to process 2k events ranged from 2 to 9 hours depending on the collision type and the CPU type that the job was processed on. This corresponds to a range of roughly 4s/ev to 16s/ev. The reconstruction only part is considered to be half of the roughly 6 hour average time to simulate 2k events. By way of comparison, sPHENIX estimates 15s/ev for Au+Au scattering and 10.4s/ev for p+p scattering (see section 5.2 of \cite{sphenix_computing_plan_2019}). Thus, 5.4s/ev is assumed to be at least the right order of magnitude. The event size of 250kB is also a rough average based on the ECCE DST files for several configurations simulated in the major proposal campaigns. It is used, along with the numbers for the Raw Data Storage from table \ref{tab:integrated_luminosity_by_year}, to calculate the number of events produced in each year. The CPU needed for calibration is estimated to be roughly 5\% of that needed for full reconstruction. It is noted that the sPHENIX Computing Plan estimates this to be 25\%. The final line in table \ref{tab:cpu_summary} estimates the number of CPU cores needed to process the data for each year assuming it can be done over a 30 week period. This would mean in year-3 there would be enough CPU to keep up with the raw data production rate. In earlier years, this would not be needed as the production times are much shorter.
+The CPU required for processing the data is very difficult to estimate with any accuracy better than the order of magnitude. Nonetheless, an attempt is made here to provide such a ballpark estimate. Table \ref{tab:cpu_summary} provides summarizes the important values. The 5.4s/ev comes from estimating an average of 3 hours for reconstruction of 2k events of ECCE data. The numbers for ECCE CPU mainly come from the simulation campaigns run for proposal development which include combined simulation and reconstruction. The times to process 2k events ranged from 2 to 9 hours depending on the collision type and the CPU type that the job was processed on. This corresponds to a range of roughly 4s/ev to 16s/ev. The reconstruction only part is considered to be half of the roughly 6 hour average time to simulate 2k events. By way of comparison, sPHENIX estimates 15s/ev for Au+Au scattering and 10.4s/ev for p+p scattering (see section 5.2 of \cite{sphenix_computing_plan_2019}). Thus, 5.4s/ev is assumed to be at least the right order of magnitude. The event size of 250kB is also a rough average based on the ECCE DST files for several configurations simulated in the major proposal campaigns. Note the DST event size is larger than the average raw data rate divided by the event rate, as the streaming readout raw data is more tightly packed in time-frames which also avoids duplication of information between the neighboring events. The event size is used, along with the numbers for the Raw Data Storage from table \ref{tab:integrated_luminosity_by_year}, to calculate the number of events produced in each year. The CPU needed for calibration is estimated to be roughly 5\% of that needed for full reconstruction. It is noted that the sPHENIX Computing Plan estimates this to be 25\%. The final line in table \ref{tab:cpu_summary} estimates the number of CPU cores needed to process the data for each year assuming it can be done over a 30 week period. This would mean in year-3 there would be enough CPU to keep up with the raw data production rate. In earlier years, this would not be needed as the production times are much shorter.
 
 \begin{table}[htb!]
     \centering
@@ -64,15 +64,15 @@ The CPU required for processing the data is very difficult to estimate with any 
         \hline
         Recon process time/core	& 5.4s/ev	& 5.4s/ev	& 5.4s/ev \\
         \hline
-        Event size	& 250kB	& 250 kB & 250kB \\
+        Streaming-unpacked event size	& 33kB	& 33kB & 33kB \\
         \hline
-        Number of events produced &	16B	& 81B & 726B \\
+        Number of events produced &	121 billion	& 605 billion & 5,443 billion \\
         \hline
-        CPU-core hours (recon-only, 1 pass)	& 24Mcore-hrs	& 121Mcore-hrs &	1089Mcore-hrs \\
+        CPU-core hours (recon-only, 1 pass)	& 181Mcore-hrs	& 907Mcore-hrs &	8165Mcore-hrs \\
         \hline
-        CPU-core hours (calib-only) &	1.2Mcore-hrs &	6.0Mcore-hrs &	54.4Mcore-hrs \\	
+        CPU-core hours (calib-only) &	9Mcore-hrs &	45Mcore-hrs &	408Mcore-hrs \\	
         \hline
-        Cores needed to process in 30 weeks	& 5k &	25k &	227k \\
+        2020-cores needed to process in 30 weeks	& 38k &	189k &	1701k \\
         \hline
     \end{tabular}
     \caption{Estimates of CPU needed for reconstruction of raw data. The number of seconds per event is highly dependent on the type of processor being used. Number of events comes from total raw data storage estimate in table \ref{tab:integrated_luminosity_by_year}. Calibration is assumed to be 5\% of reconstruction time.}

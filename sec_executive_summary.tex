@@ -1,0 +1,59 @@
+
+% Executive Summary
+
+The ECCE consortium plans to deploy a federated computing model for the EIC where multiple facilities are used. ECCE recognizes the need for a global EIC model and intends to fully participate in the design and implementation of such a system. A similar strategy has been successfully deployed by the LHC in the form of the Worldwide LHC Computing Grid (WLCG)~\cite{SHIERS2007219}. ECCE has developed a tiered ``Butterfly'' model for EIC computing that was inspired by the WLCG model, but updated to better reflect the computing landscape anticipated for the EIC. In this model, the EIC detector supplies the data, but the SDCC at BNL is treated as one of a pool of sites used for long term storage and compute. Both SDCC and JLab would be considered as \emph{Echelon 1} sites with the ability to add others as appropriate. Raw data would be distributed amongst multiple \emph{Echelon 2} sites for processing with the processed data being returned to Echelon 1. Researchers would directly access the processed data at the Echelon 1 sites.
+
+We have adopted a fixed-latency offline computing model where both the final calibration and reconstruction of raw data occur within 2-3 weeks of acquisition. During this period, raw data will be buffered on disk at all of the Echelon 1 sites, along with permanent archival copies on tapes. Final calibration will be performed semi-automatically including accumulating sufficient data for tracker alignment and energy scale calibration of the calorimeters. AI/ML will be integrated throughout this model. After calibration, data processing  will be released to multiple sites including HTC facilities at both Echelon 1 and 2 sites. We expect that the produced simulation sample will focus on 10\% of the EIC collision cross-section that is directly relevant for the signal and background of the core ECCE physics program. These physics processes will be simulated to $O(10)$~times the statistics in real data to constrain systematic uncertainty from the simulated sample to be much smaller than the data statistical uncertainty.
+
+A summary of the anticipated resource requirements can be seen here in table \ref{tab:computing-integrated_luminosity_by_year}.
+
+
+\begin{table}[htb!]
+    %\centering
+    \hskip-0.8cm
+    \begin{tabular}{c|c|c|c}
+        \hline
+        % \hline
+         \textbf{ECCE Runs}       & year-1                & year-2                  & year-3                \\
+        \hline
+         Luminosity              & $10^{33}\mathrm{cm}^{-2}\mathrm{s}^{-1}$ & $2\times 10^{33}\mathrm{cm}^{-2}\mathrm{s}^{-1}$ & $10^{34}\mathrm{cm}^{-2}\mathrm{s}^{-1}$ \\
+        %  \hline
+         Weeks of Running        & 10                    & 20                      & 30                    \\
+        %  \hline
+         Operational efficiency    & 40\%                  & 50\%                    & 60\%                  \\
+        %  \hline
+        Disk (temporary)  &  1.2PB & 3.0PB & 18.1PB \\
+        %\hline
+        Disk (permanent)    & 0.4PB & 2.4PB &	20.6PB \\
+        %\hline
+        %\textbf{TOTAL}          & 1.6PB &	5.4PB &	38.7PB \\
+         Data Rate to Storage    & 6.7Gbps               & 16.7Gbps                & 100Gbps               \\
+        %  \hline
+         Raw Data Storage (no duplicates) & 4PB          & 20PB                    & 181PB                 \\
+        %  \hline
+        %  Total Storage (no duplicates) & 4.4PB           & 22PB                   & 200PB                  \\
+        %  \hline
+        \hline
+        Recon process time/core	& 5.4s/ev	& 5.4s/ev	& 5.4s/ev \\
+        % \hline
+        Streaming-unpacked event size	& 33kB	& 33kB & 33kB \\
+        % \hline
+        Number of events produced &	121 billion	& 605 billion & 5,443 billion \\
+        % \hline
+         Recon Storage          & 0.4PB                  & 2PB                    & 18PB                   \\
+        %  \hline
+        % CPU-core hours (recon-only, 1 pass)	& 24Mcore-hrs	& 121Mcore-hrs &	1089Mcore-hrs \\
+        % \hline
+        % CPU-core hours (calib-only) &	1.2Mcore-hrs &	6.0Mcore-hrs &	54.4Mcore-hrs \\	
+        % \hline
+        CPU-core hours (recon+calib)	& 191Mcore-hrs	& 953Mcore-hrs &	8,573Mcore-hrs \\
+        % \hline
+        2020-cores needed to process in 30 weeks	& 38k &	189k &	1,701k \\
+        % \hline
+        \hline
+   \end{tabular}
+    \caption{Estimate of raw data storage and compute needs for first 3 years of ECCE,  assuming ramp up to full luminosity by year 3. 
+    % Numbers for the first two years are estimated for the purposes of this exercise and do not come from an external source. n.b. each value represents \emph{only} the needs for data produced in that year and \emph{not} a cumulative total.
+    }
+    \label{tab:computing-integrated_luminosity_by_year}
+\end{table}

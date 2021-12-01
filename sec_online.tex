@@ -1,7 +1,7 @@
 %- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 \label{sec:online}
 
-\subsection{Data Acquisition}
+\subsection{Data acquisition}
 %\textbf{\emph{Jan B.}}
 
 We envision a DAQ system following a streaming readout paradigm. In the following, we will describe the individual components as well as the overall data flow and bandwidth model. An overview of the system is shown in Figure \ref{fig:data_acquisition_diagram}.
@@ -36,9 +36,8 @@ The data streams are buffered on local hard disks, with enough capacity to store
 
 The data are then pushed upstream to on-site or federated storage as part of the overall EIC project.
 
-
 \subsection{Online monitoring}\label{subsec:online_mon}
-Online monitoring is divided into a fast path with bound latency and a slow path. The fast path provides low-latency feedback for accelerator steering and equipment protection. The data for this path are generated early in the DAQ chain, either on the FELIX host CPUs or on the FELIX card themselves. Necessarily, they are limited in scope to counting, summing or similar type of information. The slow path provides higher-level information for quality control. Here, its is possible to reconstruct and analyse full events on-the-fly, by copying pre-selected time segments from the data stream to the analysis sub-cluster. Note here that such a monitoring system does not require the guaranteed reconstruction of all data, just of a suitable subset. That subset can either be selected unbiased by selecting periodic time segments, or biased by selecting time-segments tagged by data filters in the main data stream.  Similar monitoring can be performed on data on the local buffer for those quantities which require calibration data or two-pass analysis.
+Online monitoring is divided into a fast path with bound latency and a slow path. The fast path provides low-latency feedback for accelerator steering and equipment protection. The data for this path are generated early in the DAQ chain, either on the FELIX host CPUs or on the FELIX card themselves. Necessarily, they are limited in scope to counting, summing or similar type of information. The slow path provides higher-level information for quality control. Here, it's possible to reconstruct and analyse full events on-the-fly, by copying pre-selected time segments from the data stream to the analysis sub-cluster. Note here that such a monitoring system does not require the guaranteed reconstruction of all data, just of a suitable subset. That subset can either be selected unbiased by selecting periodic time segments, or biased by selecting time-segments tagged by data filters in the main data stream.  Similar monitoring can be performed on data on the local buffer for those quantities which require calibration data or two-pass analysis.
 
 % DL
 For both types of data a system will be needed to evaluate the monitoring data and inform the experiment operators of potential issues. This will largely include the creation of histograms which may be monitored either graphically or by some automated means. The prevalence of AI will certainly play a large role in that it will be able to evaluate a wider variation of monitoring data and at a much higher rate than could be expected of humans. Such systems are already deployed and under development~\cite{Hydra2021}. 
@@ -48,7 +47,9 @@ We expect that during initial commissioning noise rates will be significantly hi
 
 Such a system also allows us to simply incorporate a dedicated collision detector for rate reduction: only time segments which are flagged to have a collision are kept, others are dropped early in the processing chain. 
 
-This bounded-latency system could either be realized as a classic electrical trigger signal, or via software messages sent to the FELIX hosts with a clear advantage with regard to flexibility and ease of implementation, but with possibly a larger latency. The optimal implementation depends on the capabilities of the future FELIX successor and bandwidth availability on the FELIX host servers.
+This bounded-latency system could either be realized as a classic hardware filtering signal, or via software messages sent to the FELIX hosts with a clear advantage with regard to flexibility and ease of implementation, but with possibly a larger latency. The optimal implementation depends on the capabilities of the future FELIX successor and bandwidth availability on the FELIX host servers.
+
+\input{sec_AI_trigger}
 
 \subsection{Expected data rates and reduction steps}
 

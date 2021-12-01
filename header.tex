@@ -11,6 +11,7 @@
 \usepackage[figuresright]{rotating}
 \usepackage{wrapfig}
 \usepackage[usenames,dvipsnames]{color}
+\usepackage{authblk}
 \usepackage{microtype}
 \usepackage{tikz}
 \usetikzlibrary{arrows,chains,shapes,matrix,scopes,positioning,fadings,backgrounds,fit,mindmap,trees,decorations.markings,decorations.pathreplacing,calc}
@@ -177,3 +178,15 @@
 
 \usepackage[textwidth=1in,textsize=footnotesize,disable]{todonotes}
 %\usepackage[textwidth=1in,textsize=footnotesize]{todonotes}
+
+
+\usepackage{mfirstuc} 
+
+
+\newcommand{\addComment}[2]{
+  \expandafter\newcommand\csname #1\endcsname[1]{{\bf \color{#2} \capitalisewords{#1}:\,##1}}
+  \expandafter\newcommand\csname #1cor\endcsname[2]{{\color{#2} \capitalisewords{#1}:\,\st{##1}{\bf ##2}}}
+  \expandafter\newcommand\csname #1color\endcsname{#2}
+}
+%--------------------------  
+\addComment{cris}{red} 

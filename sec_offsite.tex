@@ -13,7 +13,7 @@ The EIC will be a large international project with many researchers and stakehol
 This section will briefly describe how a federated computing model for the EIC might look, how it will be used to process the raw data, and how it will also be used to process the large amounts of simulation needed for the program.
 
 %-------------------------------------------------------------------
-\subsection{Federated Computing}
+\subsection{Federated computing}
 
 EIC data processing will employ a federated computing model where multiple facilities will be used. A similar strategy has been successfully deployed by the LHC in the form of the Worldwide LHC Computing Grid (WLCG) or simply \emph{the Grid}\cite{SHIERS2007219}. The benefits of distributing the computing across multiple sites include:
 
@@ -31,13 +31,13 @@ For the EIC one may consider an alternative model in which the data producer (th
 
 \begin{figure}[hbt!]
  \begin{center}
-   \raisebox{0.5mm}{\includegraphics[clip, width=0.99\linewidth]{figs/figure_federated_offsite_butterfly.pdf}}
+   \raisebox{0.5mm}{\includegraphics[clip, width=0.99\linewidth]{figs/computing_figure_federated_offsite_butterfly.pdf}}
   \caption[Federated Computing Butterfly model.]{\label{fig:federated_offsite_butterfly} Butterfly model of federated offsite computing. In this model, nearly all storage is contained in echelon 1 while large portions of the raw data processing is delegated to multiple HTC/HPC facilities. The named facilities in this graphic are merely examples and do not represent commitments or final plans.}
  \end{center}
 \end{figure}
 
 %-------------------------------------------------------------------
-\subsection{Raw Data Compute}
+\subsection{Raw data compute}
 Processing of EIC data will occur over multiple sites which will include HTC facilities at both BNL and JLab and possibly others. The plan calls for processing the raw data into reconstructed objects such as tracks, jets, and calorimeter clusters within 2-3 weeks of acquisition. The bulk of the few week latency will be due to the time it takes to calibrate the data so that reconstruction may occur. Figure \ref{fig:federated_offsite_example} illustrates how such a scheme could work. The raw data read from the Streaming DAQ system will need to be reduced over multiple filtering and compression stages to a rate that is reasonable to transport offsite from BNL using its external network connection. Table \ref{tab:reduction_factors} lists the stages and with ingoing and outgoing rates and their respective reduction factors. Potential technologies that could be applied at each stage are also listed.
 
 The DOE lab systems are connected via the ESNet unclassified network for scientific research\cite{ESNet}. As of 2021, BNL has a 400Gbps connection to ESNet and JLab has dual 10Gbps connections. In 2022 or 2023, JLab is anticipated to increase its bandwidth to at least 100Gbps. When the EIC begins collecting data around 2030, one may expect a 1Tbps bandwidth between the two labs. This is an order of magnitude higher than the anticipated raw data rate from the ECCE detector. Thus, transfer of the entire raw data set offsite from BNL in 2030 seems reasonable.
