@@ -1,14 +1,6 @@
-%\textbf{\emph{David L.}}
 
-%\emph{Simulation should be distributed across multiple Compute facilities. The raw data reconstruction should likewise include multiple sites. In the model where we do calibrations and reconstruction in ``real time'' the data will need to be streamed to multiple sites if we are to federate the processing of raw data. This should discuss federating those resources.}
 
-%\emph{See slide 4 of Nhan Tran's talk at AI4EIC.}
-
-%\emph{The final raw data (as defined by DOE rules) must have multiple copies. Could this be done by storing one at BNL wile simultaneously transferring a copy to JLab for storage? Other sites?}
-
-%\emph{Need estimates on total bandwidth needed from BNL, number of remote sites, and bandwidth/storage needed from each.}
-
-The EIC will be a large international project with many researchers and stakeholders spread throughout the globe. While the accelerator and detectors are necessarily placed at a single locale, the computing need not be and can better reflect the geographic diversity of the collaborations involved in EIC research. In the modern age, high speed network connectivity has become very robust. In the time frame of the EIC ($\sim 2030$) we can expect even more reliable and even faster networks. This will make transporting data on the scale the EIC is expected to produce fairly routine. To give specific numbers, BNL has a 400Gbps connection to the ESnet backbone in 2021. ECCE it currently estimated to produce 100Gbps of raw data once it is in full production sometime around 2030. Network bandwidths have shown steady growth of about 50\%/year over the past few decades\cite{nielsensLaw2019}. Thus, over the next 8 years we can expect existing bandwidths to grow by roughly a factor of 25. Even a conservative estimate that the BNL external connection bandwidth grows by only a factor of 10 means the entire ECCE raw data volume can be streamed out using only a few percent of the total available bandwidth.
+The EIC will be a large international project with many researchers and stakeholders spread throughout the globe. While the accelerator and detectors are necessarily placed at a single locale, the computing need not be and can better reflect the geographic diversity of the collaborations involved in EIC research. In the modern age, high speed network connectivity has become very robust. In the time frame of the EIC ($\sim 2030$) we can expect even more reliable and even faster networks. This will make transporting data on the scale the EIC is expected to produce fairly routine. To give specific numbers, BNL has a 400Gbps connection to the ESnet backbone in 2021. ECCE is currently estimated to produce 100Gbps of raw data once it is in full production sometime around 2030. Network bandwidths have shown steady growth of about 50\% per year over the past few decades\cite{nielsensLaw2019}. Thus, over the next 8 years we can expect existing bandwidths to grow by roughly a factor of 25. Even a conservative estimate that the BNL external connection bandwidth grows by only a factor of 10 means the entire ECCE raw data volume can be streamed out using only a few percent of the total available bandwidth.
 
 This section will briefly describe how a federated computing model for the EIC might look, how it will be used to process the raw data, and how it will also be used to process the large amounts of simulation needed for the program.
 
@@ -20,14 +12,14 @@ EIC data processing will employ a federated computing model where multiple facil
 \begin{itemize}
     \item Each site only needs to handle a fraction of data
     \item EIC computing becomes a smaller fraction of each compute farm
-    \item One site having diminished capacity temporarily  can easily be absorbed by others without reconfiguration
+    \item One site having diminished capacity temporarily can easily be absorbed by others without reconfiguration
 \end{itemize}
 
 Generally speaking, diversifying helps to mitigate certain risks. 
 
 The WLCG model of the LHC is based on multiple \emph{Tiers}, structured in a pyramid type fashion. The topmost tier (\emph{Tier 0})represents the LHC/CERN where the data is produced and all data is stored. It also supplies around 20\% of the total computing resource and does the initial reconstruction of the data before distributing it to the Tier 1 sites\cite{WLCG_Tiers_website}. The Tier 1 sites perform large scale reprocessing of the data and distribution to the Tier 2 sites. The Tier 2 sites do more specialized analysis and simulations while the Tier 3 sites are end users. Each tier in the system only communicates with tiers directly above or below it in the hierarchy.
 
-For the EIC one may consider an alternative model in which the data producer (the experiments of the EIC) and the BNL compute facility (e.g. SDCC) are independent. This allows computing at BNL to become part of a pool of facilities that handle the computing as a federated resource. Figure \ref{fig:federated_offsite_butterfly} illustrates such a model referred to here as a ``\emph{Butterfly}'' model due to the rough shape of the figure. In this model, both compute and storage are distributed with the storage being focused in the Echelon 1 sites. This means access to the data by the end users will be done by connection Echelon 3 sites directly to Echelon 1 sites. The Echelon 1 sites will themselves provide significant compute capability, but may also farm out large campaigns to Echelon 2 sites.
+For the EIC one may consider an alternative model in which the data producer (the experiments of the EIC) and the BNL compute facility (e.g. SDCC) are independent. This allows computing at BNL to become part of a pool of facilities that handle the computing as a federated resource. Figure \ref{fig:federated_offsite_butterfly} illustrates such a model referred to here as a ``\emph{Butterfly}'' model due to the rough shape of the figure. In this model, both compute and storage are distributed with the storage being focused in the Echelon 1 sites. This means access to the data by the end users will be done by connecting Echelon 3 sites directly to Echelon 1 sites. The Echelon 1 sites will themselves provide significant compute capability, but may also farm out large campaigns to Echelon 2 sites. In the simulation campaigns performed for the ECCE proposal, the model shown in Fig.~\ref{fig:federated_offsite_butterfly} was successfully implemented for simulated data production.
 
 \begin{figure}[hbt!]
  \begin{center}
@@ -38,9 +30,9 @@ For the EIC one may consider an alternative model in which the data producer (th
 
 %-------------------------------------------------------------------
 \subsection{Raw data compute}
-Processing of EIC data will occur over multiple sites which will include HTC facilities at both BNL and JLab and possibly others. The plan calls for processing the raw data into reconstructed objects such as tracks, jets, and calorimeter clusters within 2-3 weeks of acquisition. The bulk of the few week latency will be due to the time it takes to calibrate the data so that reconstruction may occur. Figure \ref{fig:federated_offsite_example} illustrates how such a scheme could work. The raw data read from the Streaming DAQ system will need to be reduced over multiple filtering and compression stages to a rate that is reasonable to transport offsite from BNL using its external network connection. Table \ref{tab:reduction_factors} lists the stages and with ingoing and outgoing rates and their respective reduction factors. Potential technologies that could be applied at each stage are also listed.
+Processing of EIC data will occur over multiple sites which will include HTC facilities at both BNL and JLab and possibly others. The plan calls for processing the raw data into reconstructed objects such as tracks, jets, and calorimeter clusters within 2-3 weeks of acquisition. The bulk of the few week latency will be due to the time it takes to calibrate the data so that reconstruction may occur. Figure \ref{fig:federated_offsite_example} illustrates how such a scheme could work. The raw data read from the streaming DAQ system will need to be reduced over multiple filtering and compression stages to a rate that is reasonable to transport offsite from BNL using its external network connection. Table \ref{tab:reduction_factors} lists the stages and with in-going and out-going rates and their respective reduction factors. Potential technologies that could be applied at each stage are also listed.
 
-The DOE lab systems are connected via the ESNet unclassified network for scientific research\cite{ESNet}. As of 2021, BNL has a 400Gbps connection to ESNet and JLab has dual 10Gbps connections. In 2022 or 2023, JLab is anticipated to increase its bandwidth to at least 100Gbps. When the EIC begins collecting data around 2030, one may expect a 1Tbps bandwidth between the two labs. This is an order of magnitude higher than the anticipated raw data rate from the ECCE detector. Thus, transfer of the entire raw data set offsite from BNL in 2030 seems reasonable.
+The DOE lab systems are connected via the ESNet unclassified network for scientific research\cite{ESNet}. As of 2021, BNL has a 400Gbps connection to ESNet and JLab has dual 10Gbps connections. In 2022 or 2023, JLab is anticipated to increase its bandwidth to at least 100Gbps. When the EIC begins collecting data around 2030, one may expect a 1Tbps bandwidth between the two labs. This is an order of magnitude higher than the anticipated raw data rate after filtering from the ECCE detector. Thus, transfer of the entire raw data set offsite from BNL in 2030 seems reasonable.
 
 
 \begin{figure}[hbt!]
@@ -51,7 +43,7 @@ The DOE lab systems are connected via the ESNet unclassified network for scienti
  \end{center}
 \end{figure}
 
-\begin{table}[htb!]
+\begin{table*}[ht]
     \centering
     \begin{tabular}{p{4cm}|c|c|c}
         \hline
@@ -74,7 +66,7 @@ The DOE lab systems are connected via the ESNet unclassified network for scienti
     \end{tabular}
     \caption{Data rates and reduction factors for proposed near real time data flow. Estimated data rate from ECCE detector is $\mathcal{O}(100Tbps)$. Raw storage will be $\mathcal{O}(100Gbps)$. Reconstructed object storage will be $\mathcal{O}(10Gbps)$. Parentheses indicate technologies that could be used, but seem less likely choices.}
     \label{tab:reduction_factors}
-\end{table}
+\end{table*}
 
 %-------------------------------------------------------------------
 %\subsection{Simulation Compute}

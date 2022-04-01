@@ -1,93 +1,32 @@
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                                                              %
-%   ECCE Note template
-%   v0 produced August 1, 2021
-%             
-%                                                              %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%  ECCE proposal team: Peter Steinberg (peter.steinberg@bnl.gov)
-
-% C. Fanelli --- Oct 8, re-adapted template
- 
-                           
-\documentclass[12pt,twoside]{article}
 %\date{December 1, 2021}
 
-%-----------
-\usepackage{array}
-\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
-\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+%\documentclass[final,5p,times,twocolumn]{elsarticle}
+\documentclass[longtitle,preprint,5p,times,twocolumn]{elsarticle}
 
-%%%%%%%%%%%%%%%%
-% Adding the include only list allows you to typeset only your
-% chapter while maintaining overall page numbers and references.
-% It also shields you from errors in other chapters as you go along.
-% You need to typeset the whole thing once though. 
-
-%\includeonly{title_page,daq_trig/daq_trig}
-
-%%%%%%%%%%%%%%%%%%  header  (packages, 
 \input{header}
 
-\title{ECCE Computing Plan}
-\input{author_list}
-
+\linenumbers
+\journal{Nuclear Instruments and Methods A}
 
 \begin{document}
-%\frontmatter
-%\pagestyle{empty} %Setting this to empty removes page numbers
-\pagestyle{empty}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% title page
-\include{title_page}
 
-\cleardoublepage
-\pagestyle{plain}
-\maketitle
-\pagenumbering{roman}
+\begin{frontmatter}
+\title{ECCE Computing Plan}
+\def\theaffn{\arabic{affn}} % added to use numbers instead of letters with an long author list
+\input{authors/authors}
+\input{authors/affiliations}
+\input{abstract}
+\end{frontmatter}
 
-%\setcounter{page}{1}
-
-%\clearpage
-%\cleardoublepage
-
-%\resetlinenumber
-
-
-%\cleardoublepage
-
-%\mainmatter
-
-%\renewcommand{\thepage}{\arabic{page}}
-%\setcounter{chapter}{0}
-%\setcounter{page}{1}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
-\begin{abstract}
-%\section* {Executive Summary}
-\label{sec:ExecutiveSummary}
-\input{sec_executive_summary}
-\end{abstract}
-\clearpage
-\setcounter{tocdepth}{3}
+\setcounter{tocdepth}{1}
 \tableofcontents
-\clearpage
-\pagenumbering{arabic}
-\setcounter{page}{1}
+
 
 \section {Introduction}
 \label{sec:introduction}
 \input{sec_introduction}
 
-% temporarily commented --- CF
-%\section {Artificial Intelligence / Machine Learning} %/Machine Learning
-%\label{sec:ai}
-\input{sec_AI}
-
-% temporarily commented --- CF
-%\section {Detector and Program Development}
-%\label{sec:detector_development}
-%\input{sec_detector_development}
 
 \section {Online}
 \label{sec:online}
@@ -107,6 +46,17 @@
 \input{sec_resources}
 
 
+\section{Summary}
+\label{sec:executive_summary}
+\input{sec_summary}
+
+\section{Acknowledgements}
+\label{acknowledgements}
+
+
+%\section{Conclusions}
+%\label{sec:conclusions}
+%\input{sec_conclusions}
 
 %------------ TEMPLATE -----------%
 %\clearpage
@@ -119,9 +69,8 @@
 %\label{section2}
 %\include{template_section2}
 
-\listoftodos[To Do]
 
-\bibliographystyle{unsrturl}
-\bibliography{refs}
+\bibliographystyle{elsarticle-num} 
+\bibliography{references,refs-ecce}
 
 \end{document}  %%%%%%%%%%%%%%%%% End Document
