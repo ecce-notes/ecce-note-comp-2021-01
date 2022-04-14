@@ -3,7 +3,7 @@
 \subsection{Data acquisition}
 %\textbf{\emph{Jan B.}}
 
-We envision a DAQ system following a streaming readout paradigm, where all data is readout in an unbiased hardware trigger-less system. In the following, we will describe the individual components as well as the overall data flow and bandwidth model. An overview of the system is shown in Figure \ref{fig:data_acquisition_diagram}.
+We envision a DAQ system following a streaming readout paradigm, where all data is collected in an unbiased hardware trigger-less system. In the following, we will describe the individual components as well as the overall data flow and bandwidth model. An overview of the system is shown in Figure \ref{fig:data_acquisition_diagram}.
 
 
 \begin{figure*}[th]
@@ -18,7 +18,7 @@ We envision a DAQ system following a streaming readout paradigm, where all data 
 
 
 \subsection{DAQ components}
- Front-end electronics (FEE) modules sit inside or on the detector. In most cases, detector-specific ASICs provide the data conversion from the analog to digital domain, do zero-suppression and provide an interface to fiber transceivers for data transport to the counting room.  For this, we envision FELIX-type PCIe-based receiver cards\footnote{In the following, we will use "FELIX card" as a stand-in for a successor board of similar architecture.} which support a large number of high speed fiber links per card.  
+ Front-end electronics (FEE) modules sit inside or on the detector. In most cases, detector-specific ASICs provide the data conversion from the analog to digital domain, do zero-suppression and provide an interface to fiber transceivers for data transport to the counting room. For this, we envision Front-End Link eXchange (FELIX)-type PCIe-based receiver cards\footnote{In the following, we will use ``FELIX card'' as a stand-in for a successor board of similar architecture.} which support a large number of high speed fiber links per card~\cite{Chen:2019owc}. FELIX is designed for new or upgraded detectors and trigger systems in the ATLAS Phase-I upgrade and High-Luminosity LHC, and is implemented by server PCs with commodity network interfaces and PCIe cards with large field-programmable gate arrays (FPGAs) and many high speed serial fiber transceivers. 
 
 Since some FEE may not utilize the full bandwidth of a fiber link, cost-effective stream aggregator boards (SABs), based either on small FPGAs or COTS multiplexer ICs, can bundle multiple fiber links coming from FEE to a single fiber connected to the FELIX cards. 
 
@@ -42,7 +42,7 @@ Online monitoring is divided into a fast path with bound latency and a slow path
 For both types of data a system will be needed to evaluate the monitoring data and inform the experiment operators of potential issues. This will largely include the creation of histograms which may be monitored either graphically or by some automated means. The prevalence of AI will certainly play a large role in that it will be able to evaluate a wider variation of monitoring data and at a much higher rate than could be expected of humans. Such systems are already deployed and under development~\cite{Hydra2021}. 
 
 \subsection{Risk mitigation}
-We expect that during initial commissioning noise rates will be significantly higher than during established operation, as accelerator and detector parameters will not yet be tuned optimally. Such high noise rates might overwhelm processing and upstream write capability. To allow progress in this initial phase, the DAQ system will allow to input a bounded-latency signal on the FELIX card or host CPU level to suppress uninteresting time segments.
+We expect that during initial commissioning noise rates will be significantly higher than during established operation, as accelerator and detector parameters will not yet be tuned optimally. Such high noise rates might overwhelm processing and upstream write capability. To allow progress in this initial phase, the DAQ system will accept as input a bounded-latency signal on the FELIX card or host CPU level to suppress uninteresting time segments.
 
 Such a system also allows us to simply incorporate a dedicated collision detector for rate reduction: only time segments which are flagged to have a collision are kept, others are dropped early in the processing chain. 
 
@@ -52,13 +52,13 @@ This bounded-latency system could either be realized as a classic hardware filte
 
 \subsection{Expected data rates and reduction steps}
 
-%\emph{JCB: I'm not sure how valid these numbers are.}
+
 
 Since connections between detector and FEPs might not be zero-suppressed digital or even analog data, it makes no sense to specify a data rate at the detector-to-hall border. Instead, the following section describes the expected data rate on the Fiber/FELIX level and downstream from there.
 
 At nominal luminosity, we expect that true signals and beam-gas interactions produce a total rate of $\mathcal{O}$(100 Gbps) of zero-suppressed data at the FELIX card level. However, detector noise and additional backgrounds, especially during early operation, can completely dominate this rate. We assume therefore a total rate of $\mathcal{O}$(10 Tbps) bandwidth on the fiber level. Next-gen FELIX cards will have 25 Gbps receivers; for headroom for burst rates, non-ideal allocation of detector channels to fibers \emph{etc.}, we assume 12.5 Gbps as the average rate per fiber, and as a consequence, about 800 fibers.
 
-A current-generation FELIX card has ports that support 48 fibers, leading to $\mathcal{O}$(20) FELIX cards. Each card would then receive 600 Gbps. We assume that at the time of procurement for EIC, cards based on at least PCIe Gen5 are available, providing 500 Gbps to the host server, requiring a modest reduction of the data rate in FELIX card itself, for example via cross-channel noise reduction. In combination with the host CPU, we expect a total reduction by a factor of 5 to $\mathcal{O}$(2) Tbps total, 100 Gbps per server. We note that a typical server with 128GB of memory can buffer the full stream for about 2 seconds, ample time for region-of-interest/time-slice-of-interest communication between the FELIX hosts, making higher reduction factors comparatively easy to achieve. The data can then be streamed out via a dual 100 Gbps link to the second layer in the compute farm.
+A current generation FELIX card has ports that support 48 fibers. Assuming the same number of ports, this leads to O(20) next generation FELIX cards. Non-optimal distribution of FEE bandwidth across the fibers, the uncertainty in achievable reduction rate in the FELIX and achievable out-bound bandwidth may grow the number of required FELIX cards up to 3 fold for a total of 60. Each card would then receive 600 Gbps. We assume that at the time of procurement for EIC, cards based on at least PCIe Gen5 are available, providing 500 Gbps to the host server, requiring a modest reduction of the data rate in FELIX card itself, for example via cross-channel noise reduction. In combination with the host CPU, we expect a total reduction by a factor of 5 to $\mathcal{O}$(2) Tbps total, 100 Gbps per server. We note that a typical server with 128GB of memory can buffer the full stream for about 2 seconds, ample time for region-of-interest/time-slice-of-interest communication between the FELIX hosts, making higher reduction factors comparatively easy to achieve. The data can then be streamed out via a dual 100 Gbps link to the second layer in the compute farm.
 
 In the compute farm, the data is further analyzed and filtered. We expect that with inter-detector noise suppression and high-level data selection the required effective bandwidth to long-term storage can be reduced to $\mathcal{O}$(100) Gbps.  
 
